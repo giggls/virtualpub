@@ -1,0 +1,37 @@
+
+html, body {
+   background-color: black;
+   color: white;
+   font-family: Arial, Helvetica, sans-serif;
+}
+
+h1 {
+   text-align: center;
+}
+
+#mainframe {
+   position: absolute;
+   top: 70px;
+   left: 0px;
+   background-color: grey;
+   display: block;
+   /* da muss man anscheinend margin _und_ padding abziehen */
+   width: calc(100% - 60px);
+   height: calc(100% - 90px);
+   margin-left: 20px;
+   padding-left: 20px;
+}
+
+/* da kommt das video rein */
+#videoframe {
+   position: absolute;
+   top: 70px;
+   left: 0px;
+   background-color: green;
+   width: calc(100% - 40px);
+   height: calc(100% - 90px);
+   margin-left: 20px;
+   display: none;
+}
+          
+     
