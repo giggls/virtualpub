@@ -2,13 +2,15 @@ var api=[];
 var roomnames=['Wohnzimmer','Kueche','Balkon','Klo','2021'];
 var numusers=0;
 var roomurl = 'https://geggus.net/roomcount';
+var videoActive = false;
 
 // run room number update function on page load
 window.addEventListener('load', function () {
-  update_numbers(roomurl);
+  update_page_info();
 })
 
 function on(num) {
+     videoActive = true;
      document.getElementById("mainframe").style.display = "none"
      document.getElementById("videoframe").style.display = "block"
      options.roomName = 'SilvesterParty_2020_'+roomnames[num];    
@@ -30,6 +32,7 @@ function chatClosed(api,num) {
   update_numbers(rurl);
   document.getElementById("mainframe").style.display = "block";
   document.getElementById("videoframe").style.display = "none";
+  videoActive = false;
 }
 
 var domain = "meet.gnuher.de";
@@ -41,7 +44,8 @@ var options = {
 }
 
 // update number of persons in Room displayed on landingpage
-function update_numbers(url) { 
+function update_numbers(url) {
+   console.log('called update_numbers('+url+')');
    var xmlHttp = new XMLHttpRequest();
    xmlHttp.onreadystatechange = function() { 
      if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
@@ -55,4 +59,12 @@ function update_numbers(url) {
    xmlHttp.responseType = 'json';
    xmlHttp.open("GET", url, true);
    xmlHttp.send(null); 
+}
+
+function update_page_info() {
+  if (!videoActive) {
+    update_numbers(roomurl);
+  };
+  // alle 30 Sekunden Seite aktualisieren
+  window.setTimeout("update_page_info()", 30000);
 }
