@@ -1,11 +1,20 @@
 var api=[];
-var roomnames=['Wohnzimmer','Kueche','Balkon','Klo','2021'];
+var roomnames=['Schlafzimmer','Kueche','Garage','Terrasse','kidz','foo','bar','baz','2021'];
 var numusers=0;
 var roomurl = 'https://geggus.net/roomcount';
 var videoActive = false;
 
-// run room number update function on page load
+// run this on page load
 window.addEventListener('load', function () {
+  var elems;
+  for (var r = 0; r < roomnames.length; r++) {
+    elems = document.getElementsByClassName(roomnames[r]);
+    for (var i = 0; i < elems.length; i++) {
+      console.log(r);
+      elems[i].addEventListener("click", on.bind(null, r), false);
+      elems[i].style.cursor="pointer";
+    }
+  }
   update_page_info();
 })
 
@@ -13,22 +22,30 @@ function on(num) {
      videoActive = true;
      document.getElementById("mainframe").style.display = "none"
      document.getElementById("videoframe").style.display = "block"
-     options.roomName = 'SilvesterParty_2020_'+roomnames[num];    
+     options.roomName = 'SilvesterParty_2020_'+roomnames[num];
+     console.log(options.roomName);
      api[num] = new JitsiMeetExternalAPI(domain, options);    
      api[num].executeCommand("subject", roomnames[num]);  
-     api[num].on('readyToClose', () => {    
-       chatClosed(api[num],num);
+
+     api[num].on('readyToClose', () => {
+       console.log(num);
+       chatClosed(api,num);
      });
+
      api[num].on('videoConferenceJoined', (arg) => {
        numusers = api[num].getParticipantsInfo().length;
-       var rurl=roomurl+'?'+roomnames[num]+'='+numusers;
+       var rurl=roomurl+'?'+num+'='+numusers;
+       console.log(rurl);
        update_numbers(rurl);
      });
 }
 
 function chatClosed(api,num) {
-  api.dispose();
-  var rurl=roomurl+'?'+roomnames[num]+'=-1';
+  //console.log(api[num]);
+  //var iframe = api[num].getIFrame();
+  //iframe.parentNode.removeChild(iframe);
+  api[num].dispose();
+  var rurl=roomurl+'?'+num+'=-1';
   update_numbers(rurl);
   document.getElementById("mainframe").style.display = "block";
   document.getElementById("videoframe").style.display = "none";
@@ -38,7 +55,7 @@ function chatClosed(api,num) {
 var domain = "meet.gnuher.de";
 var options = {
     roomName: "",
-    parentNode: videoframe,
+    parentNode: document.querySelector("#videoframe"),
     configOverwrite: {},
     interfaceConfigOverwrite: {}
 }
@@ -51,6 +68,7 @@ function update_numbers(url) {
      if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
        var json_resp = xmlHttp.response;
        for (const room in json_resp) {
+         console.log(room);
          document.getElementById(room).innerHTML=json_resp[room];
        }
        //alert(json.Wohnzimmer);

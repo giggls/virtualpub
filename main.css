@@ -20,6 +20,7 @@ h1 {
    height: calc(100% - 90px);
    margin-left: 20px;
    padding-left: 20px;
+   text-align: center;
 }
 
 /* da kommt das video rein */
