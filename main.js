@@ -24,8 +24,10 @@ function offon2021() {
   if (videoActive != 9) {
     if (videoActive >= 0) {
       api[videoActive].executeCommand('hangup');
+      videoActive = -2;
+    } else {
+      on(9);
     }
-    on(9);
   }
 }
 
@@ -54,8 +56,11 @@ function chatClosed(api,num) {
   update_numbers(rurl);
   document.getElementById("mainframe").style.display = "block";
   document.getElementById("videoframe").style.display = "none";
-  videoActive = -1;
-  sec_interval();  
+  if (videoActive == -2) {
+    videoActive = -1;
+    on(9);
+  }
+  videoActive = -1;  
 }
 
 var domain = "meet.gnuher.de";
