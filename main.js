@@ -1,8 +1,10 @@
 var api=[];
-var roomnames=['Schlafzimmer','Kueche','Garage','Terrasse','kidz','foo','bar','baz','2021'];
+var roomnames=['Schlafzimmer','Kueche','Garage','Terrasse','kidz','foo','bar','baz','bat', '2021'];
 var numusers=0;
 var roomurl = 'https://geggus.net/roomcount';
-var videoActive = false;
+var videoActive = -1;
+
+var expiration_date="Jan 1, 2021 00:00:00";
 
 // run this on page load
 window.addEventListener('load', function () {
@@ -17,8 +19,18 @@ window.addEventListener('load', function () {
   update_page_info();
 })
 
+// discard active video chat and open chat 9 if it is not already active
+function offon2021() {
+  if (videoActive != 9) {
+    if (videoActive >= 0) {
+      api[videoActive].executeCommand('hangup');
+    }
+    on(9);
+  }
+}
+
 function on(num) {
-     videoActive = true;
+     videoActive = num;
      document.getElementById("mainframe").style.display = "none"
      document.getElementById("videoframe").style.display = "block"
      options.roomName = 'SilvesterParty_2020_'+roomnames[num];
@@ -37,14 +49,13 @@ function on(num) {
 }
 
 function chatClosed(api,num) {
-  //var iframe = api[num].getIFrame();
-  //iframe.parentNode.removeChild(iframe);
   api[num].dispose();
   var rurl=roomurl+'?'+num+'=-1';
   update_numbers(rurl);
   document.getElementById("mainframe").style.display = "block";
   document.getElementById("videoframe").style.display = "none";
-  videoActive = false;
+  videoActive = -1;
+  sec_interval();  
 }
 
 var domain = "meet.gnuher.de";
@@ -83,9 +94,58 @@ function update_numbers(url) {
 }
 
 function update_page_info() {
-  if (!videoActive) {
+  if (videoActive < 0) {
     update_numbers(roomurl);
   };
   // alle 30 Sekunden Seite aktualisieren
   window.setTimeout("update_page_info()", 30000);
+}
+
+const zeroPad = (num, places) => String(num).padStart(places, '0');
+
+// Countdown timer
+// Set the date we're counting down to
+var countDownDate = new Date(expiration_date).getTime();
+
+// Update the count down every second
+var interval = setInterval(function(){ sec_interval(); }, 1000);
+
+function sec_interval() {
+
+  // Get today's date and time
+  var now = new Date().getTime();
+
+  // Find the distance between now and the count down date
+  var distance = countDownDate - now;
+  
+  // 5 minutes before timer expires
+  if ((distance / 1000 / 60) < 5 ) {
+    document.getElementById("noon").style.display = "block";
+  }
+    
+  // Time calculations for days, hours, minutes and seconds
+  var hours = Math.floor((distance / (1000 * 60 * 60 )));
+  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+  var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    
+  // Output the result in an element with id="demo"
+  document.getElementById("countdown").innerHTML = zeroPad(hours,2) +":"+ zeroPad(minutes,2) + ":" + zeroPad(seconds,2);
+    
+  // If the count down is over, write some text 
+  if (distance < 0) {
+    clearInterval(interval);
+    document.getElementById("countdown").innerHTML = "00:00:00";
+  }
+}
+
+document.addEventListener('keydown', keyEvent);
+
+function keyEvent(e) {
+  // view noon frame after pressing insert
+  if (e.code == "Insert") {
+    document.getElementById("noon").style.display = "block";
+  }
+  if (e.code == "Delete") {
+    document.getElementById("noon").style.display = "none";
+  }
 }

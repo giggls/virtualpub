@@ -7,7 +7,16 @@ html, body {
 }
 
 h1 {
-   text-align: center;
+   text-align: left;
+   font-size: 20pt;
+   margin-left: 20px;
+}
+
+#countdown {
+   text-align: right;
+   font-size: 20pt;
+   float:right;
+   margin-right: 20px;
 }
 
 #mainframe {
@@ -52,4 +61,26 @@ h1 {
     position: absolute;
     top: 0;
     left: 0;
+}
+
+/* chat 12 Uhr */
+#noon {
+   position: absolute;
+   top: 70px;
+   left: 0px;
+   background-color: red;
+   width: 140px;
+   height: 140px;
+   margin-left: 20px;
+   z-index: 1000;
+   padding: 20px;
+   font-size: 16pt;
+   text-align: center;
+   font-weight: bold;
+   color: black;
+   justify-content: center;
+   align-items: center;
+   float: left;
+   display: none;
+   cursor:pointer;
 }
