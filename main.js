@@ -1,5 +1,5 @@
 var api=[];
-var roomnames=['Schlafzimmer','Kueche','Garage','Terrasse','kidz','foo','bar','baz','bat', '2021'];
+var roomnames=['Schlafzimmer','Kueche','Garage','Terrasse','kidz','Wohnzimmer','Bad','baz','bat', '2021'];
 var numusers=0;
 var roomurl = 'https://geggus.net/roomcount';
 var videoActive = -1;
