@@ -1,6 +1,6 @@
 var api=[];
 var roomnames=['Schlafzimmer','Kueche','Garage','Terrasse','kidz','Wohnzimmer','Bad','baz','bat', '2021'];
-var roomhosts=[ 0,             0,       0,       1,         0,     0,           0,    0,    0,     0]
+var roomhosts=[ 0,             0,       1,       1,         0,     0,           0,    0,    0,     0]
 var numusers=0;
 var roomurl = 'https://geggus.net/roomcount';
 var videoActive = -1;
@@ -101,9 +101,13 @@ function update_numbers(url) {
 }
 
 function update_page_info() {
-  if (videoActive < 0) {
-    update_numbers(roomurl);
-  };
+  var rurl = roomurl;
+  if (!(videoActive < 0)) {
+     numusers = api[videoActive].getParticipantsInfo().length;
+     rurl=roomurl+'?'+videoActive+'='+numusers;
+  }
+  // console.log("update_numbers: "+rurl);
+  update_numbers(rurl);
   // alle 30 Sekunden Seite aktualisieren
   window.setTimeout("update_page_info()", 30000);
 }
