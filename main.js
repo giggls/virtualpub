@@ -1,10 +1,20 @@
 var api=[];
 var roomnames=['Schlafzimmer','Kueche','Garage','Terrasse','kidz','Wohnzimmer','Bad','baz','bat', '2021'];
+var roomhosts=[ 0,             0,       0,       1,         0,     0,           0,    0,    0,     0]
 var numusers=0;
 var roomurl = 'https://geggus.net/roomcount';
 var videoActive = -1;
 
 var expiration_date="Jan 1, 2021 00:00:00";
+
+var jitsi_host = ["meet.gnuher.de","iad-meet.iosb.fraunhofer.de"];
+
+var options = {
+    roomName: "",
+    parentNode: document.querySelector("#videoframe"),
+    configOverwrite: {},
+    interfaceConfigOverwrite: {}
+}
 
 // run this on page load
 window.addEventListener('load', function () {
@@ -36,7 +46,7 @@ function on(num) {
      document.getElementById("mainframe").style.display = "none"
      document.getElementById("videoframe").style.display = "block"
      options.roomName = 'SilvesterParty_2020_'+roomnames[num];
-     api[num] = new JitsiMeetExternalAPI(domain, options);    
+     api[num] = new JitsiMeetExternalAPI(jitsi_host[roomhosts[num]], options);    
      api[num].executeCommand("subject", roomnames[num]);  
 
      api[num].on('readyToClose', () => {
@@ -61,14 +71,6 @@ function chatClosed(api,num) {
     on(9);
   }
   videoActive = -1;  
-}
-
-var domain = "meet.gnuher.de";
-var options = {
-    roomName: "",
-    parentNode: document.querySelector("#videoframe"),
-    configOverwrite: {},
-    interfaceConfigOverwrite: {}
 }
 
 // update number of persons in Room displayed on landingpage
