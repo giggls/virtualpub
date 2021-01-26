@@ -1,11 +1,8 @@
 var api=[];
-var roomnames=['Schlafzimmer','Kueche','Garage','Terrasse','kidz','Wohnzimmer','Bad','baz','bat', '2021'];
-var roomhosts=[ 0,             0,       1,       1,         0,     0,           0,    0,    0,     0]
+var roomhosts=[ 0,             0,       1,       1,         0,     0,           0,    0,    0]
 var numusers=0;
 var roomurl = 'https://geggus.net/roomcount';
 var videoActive = -1;
-
-var expiration_date="Jan 1, 2021 00:00:00";
 
 var jitsi_host = ["meet.gnuher.de","iad-meet.iosb.fraunhofer.de"];
 
@@ -16,38 +13,31 @@ var options = {
     interfaceConfigOverwrite: {}
 }
 
+const zeroPad = (num, places) => String(num).padStart(places, '0')
+
 // run this on page load
 window.addEventListener('load', function () {
-  var elems;
-  for (var r = 0; r < roomnames.length; r++) {
-    elems = document.getElementsByClassName(roomnames[r]);
-    for (var i = 0; i < elems.length; i++) {
-      elems[i].addEventListener("click", on.bind(null, r), false);
-      elems[i].style.cursor="pointer";
-    }
+  var elem;
+  for (var r = 0; r < roomhosts.length; r++) {
+    var name = 'link_' + zeroPad(r+1,2);
+    elem = document.getElementById(name);
+    elem.addEventListener("click", on.bind(null, r), false);
+    elem.style.cursor="pointer"; 
   }
   update_page_info();
 })
 
-// discard active video chat and open chat 9 if it is not already active
-function offon2021() {
-  if (videoActive != 9) {
-    if (videoActive >= 0) {
-      api[videoActive].executeCommand('hangup');
-      videoActive = -2;
-    } else {
-      on(9);
-    }
-  }
-}
-
 function on(num) {
+     var name = 'link_' + zeroPad(num+1,2);
+     
      videoActive = num;
      document.getElementById("mainframe").style.display = "none"
      document.getElementById("videoframe").style.display = "block"
-     options.roomName = 'SilvesterParty_2020_'+roomnames[num];
+     options.roomName = document.getElementById(name).textContent;
+     console.log(options.roomName);
+     
      api[num] = new JitsiMeetExternalAPI(jitsi_host[roomhosts[num]], options);    
-     api[num].executeCommand("subject", roomnames[num]);  
+     api[num].executeCommand("subject", options.roomName);
 
      api[num].on('readyToClose', () => {
        chatClosed(api,num);
@@ -66,14 +56,10 @@ function chatClosed(api,num) {
   update_numbers(rurl);
   document.getElementById("mainframe").style.display = "block";
   document.getElementById("videoframe").style.display = "none";
-  if (videoActive == -2) {
-    videoActive = -1;
-    on(9);
-  }
   videoActive = -1;  
 }
 
-// update number of persons in Room displayed on landingpage
+// update number of persons in room displayed on landingpage
 function update_numbers(url) {
    // console.log('called update_numbers('+url+')');   
    var xmlHttp = new XMLHttpRequest();
@@ -81,15 +67,17 @@ function update_numbers(url) {
      if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
        var json_resp = xmlHttp.response;
        for (const room in json_resp) {
-         var obj = document.getElementsByClassName(roomnames[room]+"_guests");
-         // console.log(obj[0]);
-         if (obj[0] != undefined) {
-           var txt = obj[0].innerHTML;
-           // initial replacement
-           txt = txt.replace("xx", json_resp[room]);
-           // this replacement is for old numbers
-           txt = txt.replace(/[0-9]+/, json_resp[room]);
-           obj[0].innerHTML=txt;
+         //console.log(room);
+         var name = zeroPad(parseFloat(room)+1,2)+'_guests';
+         //console.log(name);
+         var obj = document.getElementById(name);
+         if (obj != undefined) {
+           var txt = obj.innerHTML;
+           //console.log(txt);
+           txt = txt.replace(/>[0-9]+</, '>'+json_resp[room]+'<');
+           txt = txt.replace(/>[0-9]+ /, '>'+json_resp[room]+' ');
+           console.log(json_resp[room]);
+           obj.innerHTML=txt;
          }
        }
      }
@@ -112,51 +100,3 @@ function update_page_info() {
   window.setTimeout("update_page_info()", 30000);
 }
 
-const zeroPad = (num, places) => String(num).padStart(places, '0');
-
-// Countdown timer
-// Set the date we're counting down to
-var countDownDate = new Date(expiration_date).getTime();
-
-// Update the count down every second
-var interval = setInterval(function(){ sec_interval(); }, 1000);
-
-function sec_interval() {
-
-  // Get today's date and time
-  var now = new Date().getTime();
-
-  // Find the distance between now and the count down date
-  var distance = countDownDate - now;
-  
-  // 5 minutes before timer expires
-  if ((distance / 1000 / 60) < 5 ) {
-    document.getElementById("noon").style.display = "block";
-  }
-    
-  // Time calculations for days, hours, minutes and seconds
-  var hours = Math.floor((distance / (1000 * 60 * 60 )));
-  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-  var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-    
-  // Output the result in an element with id="demo"
-  document.getElementById("countdown").innerHTML = zeroPad(hours,2) +":"+ zeroPad(minutes,2) + ":" + zeroPad(seconds,2);
-    
-  // If the count down is over, write some text 
-  if (distance < 0) {
-    clearInterval(interval);
-    document.getElementById("countdown").innerHTML = "00:00:00";
-  }
-}
-
-document.addEventListener('keydown', keyEvent);
-
-function keyEvent(e) {
-  // view noon frame after pressing insert
-  if (e.code == "Insert") {
-    document.getElementById("noon").style.display = "block";
-  }
-  if (e.code == "Delete") {
-    document.getElementById("noon").style.display = "none";
-  }
-}
