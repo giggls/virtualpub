@@ -5,6 +5,6 @@ Convert output from RoomArranger (https://www.roomarranger.com/)
 
 * crop output-image (export.png)
 
-  convert export.png -crop 1336x776+100+100 virtual-pub.png
+  convert export.png -crop 1336x674+100+100 virtual-pub.png
 
 * use virtual-pub.png as background image for virtual-pub.svg

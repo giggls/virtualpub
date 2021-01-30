@@ -1,5 +1,5 @@
 var api=[];
-var roomhosts=[ 0,             0,       1,       1,         0,     0,           0,    0,    0]
+var roomhosts=[ 0, 0, 0, 0, 0, 0, 0, 0]
 var numusers=0;
 var roomurl = 'https://geggus.net/roomcount';
 var videoActive = -1;
