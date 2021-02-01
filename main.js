@@ -1,10 +1,6 @@
 var api=[];
-var roomhosts=[ 0, 0, 0, 0, 0, 0, 0, 0]
 var numusers=0;
-var roomurl = 'https://geggus.net/roomcount';
 var videoActive = -1;
-
-var jitsi_host = ["meet.gnuher.de","iad-meet.iosb.fraunhofer.de"];
 
 var options = {
     roomName: "",
@@ -33,10 +29,10 @@ function on(num) {
      videoActive = num;
      document.getElementById("mainframe").style.display = "none"
      document.getElementById("videoframe").style.display = "block"
-     options.roomName = document.getElementById(name).textContent;
+     options.roomName = roomname_prefix+'_'+document.getElementById(name).textContent;
      console.log(options.roomName);
      
-     api[num] = new JitsiMeetExternalAPI(jitsi_host[roomhosts[num]], options);    
+     api[num] = new JitsiMeetExternalAPI(jitsi_hosts[roomhosts[num]], options);    
      api[num].executeCommand("subject", options.roomName);
 
      api[num].on('readyToClose', () => {

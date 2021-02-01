@@ -1,0 +1,10 @@
+
+// participators counter script URL
+var roomurl = 'https://geggus.net/roomcount';
+// Available hosts
+var jitsi_hosts = ["meet.gnuher.de","iad-meet.iosb.fraunhofer.de"];
+// index in jitsi_hosts to use for particular room
+var roomhosts=[ 0, 0, 0, 0, 0, 0, 0, 0]
+// prefix names with the following string to make them
+// unique between multiple instances
+var roomname_prefix="milliways";
