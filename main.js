@@ -1,6 +1,17 @@
+/*
+
+Simple Jitsi Meet based virtual pub
+
+(c) 2021 Sven Geggus <sven-git@geggus.net>
+
+*/
+
 var api=[];
 var numusers=0;
 var videoActive = -1;
+
+// SVG image DOM initialized on load
+var svgobj;
 
 var options = {
     roomName: "",
@@ -13,10 +24,12 @@ const zeroPad = (num, places) => String(num).padStart(places, '0')
 
 // run this on page load
 window.addEventListener('load', function () {
+  svgobj = document.getElementById("virtualpub").contentDocument;
+  console.log(svgobj);
   var elem;
   for (var r = 0; r < roomhosts.length; r++) {
     var name = 'link_' + zeroPad(r+1,2);
-    elem = document.getElementById(name);
+    elem = svgobj.getElementById(name);
     elem.addEventListener("click", on.bind(null, r), false);
     elem.style.cursor="pointer"; 
   }
@@ -29,7 +42,7 @@ function on(num) {
      videoActive = num;
      document.getElementById("mainframe").style.display = "none"
      document.getElementById("videoframe").style.display = "block"
-     options.roomName = roomname_prefix+'_'+document.getElementById(name).textContent;
+     options.roomName = roomname_prefix+'_'+svgobj.getElementById(name).textContent;
      console.log(options.roomName);
      
      api[num] = new JitsiMeetExternalAPI(jitsi_hosts[roomhosts[num]], options);    
@@ -66,7 +79,7 @@ function update_numbers(url) {
          //console.log(room);
          var name = zeroPad(parseFloat(room)+1,2)+'_guests';
          //console.log(name);
-         var obj = document.getElementById(name);
+         var obj = svgobj.getElementById(name);
          if (obj != undefined) {
            var txt = obj.innerHTML;
            //console.log(txt);
