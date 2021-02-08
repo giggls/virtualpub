@@ -18,7 +18,13 @@ var options = {
     parentNode: document.querySelector("#videoframe"),
     configOverwrite: {},
     interfaceConfigOverwrite: {
-       HIDE_INVITE_MORE_HEADER: true
+       HIDE_INVITE_MORE_HEADER: true,
+       TOOLBAR_BUTTONS: [
+        'microphone', 'camera', 'closedcaptions', 'desktop', 'fullscreen',
+        'fodeviceselection', 'hangup', 'profile', 'chat', 'sharedvideo', 'settings', 'raisehand',
+        'videoquality', 'filmstrip', 'stats', 'shortcuts',
+        'tileview', 'download', 'help', 'mute-everyone'
+       ]
      }
 }
 
