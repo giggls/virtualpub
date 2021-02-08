@@ -17,7 +17,9 @@ var options = {
     roomName: "",
     parentNode: document.querySelector("#videoframe"),
     configOverwrite: {},
-    interfaceConfigOverwrite: {}
+    interfaceConfigOverwrite: {
+       HIDE_INVITE_MORE_HEADER: true
+     }
 }
 
 const zeroPad = (num, places) => String(num).padStart(places, '0')
