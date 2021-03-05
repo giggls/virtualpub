@@ -44,6 +44,16 @@ window.addEventListener('load', function () {
   update_page_info();
 })
 
+window.addEventListener('beforeunload', (event) => {
+  // Cancel the event as stated by the standard.
+  event.preventDefault();
+  if (!(videoActive < 0)) {
+    chatClosed(api,videoActive);
+  }
+  // Chrome requires returnValue to be set.
+  event.returnValue = '';
+});
+
 function on(num) {
      var name = 'link_' + zeroPad(num+1,2);
      
