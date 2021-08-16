@@ -21,7 +21,7 @@ var options = {
        HIDE_INVITE_MORE_HEADER: true,
        TOOLBAR_BUTTONS: [
         'microphone', 'camera', 'closedcaptions', 'desktop', 'fullscreen',
-        'fodeviceselection', 'hangup', 'profile', 'chat', 'sharedvideo', 'settings', 'raisehand',
+        'fodeviceselection', 'hangup', 'profile', 'chat', 'sharedvideo', 'select-background', 'settings', 'raisehand',
         'videoquality', 'filmstrip', 'stats', 'shortcuts',
         'tileview', 'download', 'help', 'mute-everyone'
        ]
